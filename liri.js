@@ -62,11 +62,9 @@ else if (command === "spotify-this-song"){
 else if (command == "movie-this"){
 	request("http://www.omdbapi.com/?t=" + identify + "&apikey=1287a108", function(error, response, body) {
 
-  // If the request is successful (i.e. if the response status code is 200)
   	if (!error && response.statusCode === 200) {
   		var movieObj = JSON.parse(body);
-    // Parse the body of the site and recover just the imdbRating
-    // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
+
 	    console.log("Title: " + JSON.parse(body).Title);
 	    console.log("Year of Release: " + JSON.parse(body).Year);
 	    console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
@@ -78,15 +76,3 @@ else if (command == "movie-this"){
   	}
   })
 }
-
-
-
-
-// * Title of the movie.
-// * Year the movie came out.
-// * IMDB Rating of the movie.
-// * Rotten Tomatoes Rating of the movie.
-// * Country where the movie was produced.
-// * Language of the movie.
-// * Plot of the movie.
-// * Actors in the movie.
