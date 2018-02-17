@@ -33,41 +33,34 @@ if (command == "movie-this" || command == "spotify-this-song" && (nodeArgs.lengt
 
 //========= Check the command var to initiate function ============
 
-if (command === "my-tweet"){
+if (command == "my-tweet"){
 
 	var params = {screen_name: 'matt__1001'};
+
 	client.get('statuses/user_timeline', params, function(error, tweets, response) {
 	  if (!error) {
-	  	console.log("Tweet: " + tweets.text);
-	  	// for (var i = 0; i < 20; i++) {
-	  	// console.log("Date: " + tweets[i].created_at);
-	  	// console.log("Tweet: " + tweets[i].text);
-	  	// }
-
-		}
-		else{
+	  	for (var i in tweets) {
+		  	console.log("Date: " + tweets[i].created_at);
+		  	console.log("Tweet: " + tweets[i].text);
+	  	}
+	  } 
+	  else {
 			console.log(error);
 		}
 	})
 }
 
-else if (command === "spotify-this-song"){
-	if (identify === empty) {
-		// identify = "The Sign by Ace of Base";
-		
-		spotify.search({ type: 'track', query: "The Sign"}, function(err, data) {
-		  console.log("hey", data);
-		  if (err) {
-		    console.log('Error occurred: ' + err);
-	  	}
-	  	else {
-	  		console.log("heyhey")
-	  		console.log(data.name);
-	  		console.log(data.album);
-	  		console.log(data.preview_url);
-	  	}
-	  });
-	}
+else if (command == "spotify-this-song"){
+	spotify.search({ type: 'track', query: "The Sign"}, function(err, data) {
+	  if (err) {
+	    console.log('Error occurred: ' + err);
+  	}
+  	else {
+  		console.log(data.items.artist.name);
+  		// console.log(data.album);
+  		// console.log(data.preview_url);
+  	}
+  });
 }
 
 else if (command == "movie-this"){
