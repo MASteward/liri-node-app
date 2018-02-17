@@ -12,14 +12,25 @@ var client = new Twitter(keys.twitter);
 
 
 // =============== Store user input =================
-
-
 var command = process.argv[2];
-var identify = process.argv[3];
-var empty = "";
-// console.log(identify);
+var nodeArgs = process.argv;
+var movie = "";
+var song = "";
 
-// console.log(command);
+if (command == "movie-this" || command == "spotify-this-song" && (nodeArgs.length >= 3)){
+	if (nodeArgs.length == 3){
+		movie = "Mr+Brooks";
+		song = "The Sign";		
+	} else {
+		movie = nodeArgs[3];
+		song = nodeArgs[3];
+		for (var i = 4; i < nodeArgs.length; i++) {
+	    movie += "+" + nodeArgs[i];
+	    song += " " + nodeArgs[i];
+	  }
+	}
+}
+
 //========= Check the command var to initiate function ============
 
 if (command === "my-tweet"){
@@ -60,16 +71,16 @@ else if (command === "spotify-this-song"){
 }
 
 else if (command == "movie-this"){
-	request("http://www.omdbapi.com/?t=" + identify + "&apikey=1287a108", function(error, response, body) {
+	request("http://www.omdbapi.com/?t=" + movie + "&apikey=1287a108", function(error, response, body) {
 
   	if (!error && response.statusCode === 200) {
   		var movieObj = JSON.parse(body);
 
-	    console.log("Title: " + JSON.parse(body).Title);
-	    console.log("Year of Release: " + JSON.parse(body).Year);
-	    console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+	    console.log("Title: " + movieObj.Title);
+	    console.log("Year of Release: " + movieObj.Year);
+	    console.log("IMDB Rating: " + movieObj.imdbRating);
 	    console.log("Rotten Tomatoes Rating: " + movieObj.Ratings[1].Value);
-	    console.log("Countries Produced: " + JSON.parse(body).Production);
+	    console.log("Countries Produced: " + movieObj.Production);
 	    console.log("Language: " + movieObj.Language);
 	    console.log("Plot: " + movieObj.Plot);
 	    console.log("Cast: " + movieObj.Actors);
