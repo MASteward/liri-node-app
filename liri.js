@@ -20,7 +20,7 @@ var song = "";
 if (command == "movie-this" || command == "spotify-this-song" && (nodeArgs.length >= 3)){
 	if (nodeArgs.length == 3){
 		movie = "Mr+Brooks";
-		song = "The Sign";		
+		song = "The Sign Ace of Base";		
 	} else {
 		movie = nodeArgs[3];
 		song = nodeArgs[3];
@@ -51,12 +51,15 @@ if (command == "my-tweet"){
 }
 
 else if (command == "spotify-this-song"){
-	spotify.search({ type: 'track', query: "The Sign"}, function(err, data) {
+	console.log(song)
+	spotify.search({ type: 'track', query: song}, function(err, data) {
 	  if (err) {
 	    console.log('Error occurred: ' + err);
   	}
   	else {
-  		console.log(data.items.artist.name);
+  		console.log(data.tracks.items[0].artists[0].name);
+  		console.log(data.tracks.items[0].name);
+  		console.log(data.tracks.items[0].preview_url);
   		// console.log(data.album);
   		// console.log(data.preview_url);
   	}
@@ -80,3 +83,21 @@ else if (command == "movie-this"){
   	}
   })
 }
+
+
+
+// album: 
+//    { album_type: 'album',
+//      artists: [ [Object] ],
+//      available_markets: 
+//       [],
+//      external_urls: 
+//       { spotify: 'https://open.spotify.com/album/5UwIyIyFzkM7wKeGtRJPgB' },
+//      href: 'https://api.spotify.com/v1/albums/5UwIyIyFzkM7wKeGtRJPgB',
+//      id: '5UwIyIyFzkM7wKeGtRJPgB',
+//      images: [ [Object], [Object], [Object] ],
+//      name: 'The Sign (US Album) [Remastered]',
+//      type: 'album',
+//      uri: 'spotify:album:5UwIyIyFzkM7wKeGtRJPgB' },
+//   artists: 
+
