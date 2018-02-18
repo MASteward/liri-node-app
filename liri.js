@@ -12,36 +12,72 @@ var client = new Twitter(keys.twitter);
 
 
 // =============== Store user input =================
-var command = process.argv[2];
-var nodeArgs = process.argv;
 var movie = "";
-var song = "";
+var song = "";		
 
-if (command == "movie-this" || command == "spotify-this-song" && (nodeArgs.length >= 3)){
-	if (nodeArgs.length == 3){
-		movie = "Mr.+Brooks";
-		song = "The Sign Ace of Base";		
-	} else {
-		movie = nodeArgs[3];
-		song = nodeArgs[3];
-		for (var i = 4; i < nodeArgs.length; i++) {
-	    movie += "+" + nodeArgs[i];
-	    song += " " + nodeArgs[i];
-	  }
+function runIt(command, request){ 
+	var command = process.argv[2];
+	var nodeArgs = process.argv;
+	checkIt(command, nodeArgs);
+}
+
+
+
+//========= Check the command var to initiate function ============
+function checkIt(command, nodeArgs){
+
+	if (command == "my-tweet"){
+		
+		tweetTweet();
+
+	} 
+
+	else if (command == "spotify-this-song"){
+		if (nodeArgs.length > 3){
+			song = nodeArgs[3];
+			for (var i = 4; i < nodeArgs.length; i++) {
+		    song += " " + nodeArgs[i];
+			}
+			listenUp(song);
+		} 
+		else {
+			song = "The Sign Ace of Base";
+			listenUp(song);
+		}
+	} 
+	
+	else if (command == "movie-this"){
+		if (nodeArgs.length > 3){
+			movie = nodeArgs[3];
+			for (var i = 4; i < nodeArgs.length; i++) {
+				movie = "+" + nodeArgs[i];
+			}
+			jiffyPop(movie);
+		} 
+		else {
+			movie = "Mr.+Brooks";
+			jiffyPop(movie);
+		}
+	} 
+	else if (command == "do-what-it-says") {
+		
+		justDoIt();
+
 	}
 }
 
-//========= Check the command var to initiate function ============
+ //==================== TWITTER ======================
 
-if (command == "my-tweet"){
-
+function tweetTweet(){
 	var params = {screen_name: 'matt__1001'};
-
 	client.get('statuses/user_timeline', params, function(error, tweets, response) {
 	  if (!error) {
+	  	console.log("\n======================================\n")
 	  	for (var i in tweets) {
 		  	console.log("Date: " + tweets[i].created_at);
 		  	console.log("Tweet: " + tweets[i].text);
+
+		  	console.log("\n======================================\n");
 	  	}
 	  } 
 	  else {
@@ -50,36 +86,67 @@ if (command == "my-tweet"){
 	})
 }
 
-else if (command == "spotify-this-song"){
-	console.log(song)
+//===================== SPOTIFY ======================
+
+function listenUp(song){
 	spotify.search({ type: 'track', query: song}, function(err, data) {
 	  if (err) {
 	    console.log('Error occurred: ' + err);
   	}
   	else {
-  		console.log("Artist: " + data.tracks.items[0].artists[0].name);
-  		console.log("Song: " + data.tracks.items[0].name);
-  		console.log("Preview Link: " + data.tracks.items[0].preview_url);
-  		console.log("Album: " + data.tracks.items[0].album.name);
+  		console.log("\nArtist: " + data.tracks.items[0].artists[0].name);
+  		console.log("\nSong: " + data.tracks.items[0].name);
+  		console.log("\nPreview Link: " + data.tracks.items[0].preview_url);
+  		console.log("\nAlbum: " + data.tracks.items[0].album.name);
   	}
   });
 }
 
-else if (command == "movie-this"){
+//===================== OMDB =========================
+
+function jiffyPop(movie){
 	request("http://www.omdbapi.com/?t=" + movie + "&apikey=1287a108", function(error, response, body) {
 
   	if (!error && response.statusCode === 200) {
   		var movieObj = JSON.parse(body);
 
-	    console.log("Title: " + movieObj.Title);
-	    console.log("Year of Release: " + movieObj.Year);
-	    console.log("IMDB Rating: " + movieObj.imdbRating);
-	    console.log("Rotten Tomatoes Rating: " + movieObj.Ratings[1].Value);
-	    console.log("Countries Produced: " + movieObj.Production);
-	    console.log("Language: " + movieObj.Language);
-	    console.log("Plot: " + movieObj.Plot);
-	    console.log("Cast: " + movieObj.Actors);
+	    console.log("\nTitle: " + movieObj.Title);
+	    console.log("\nYear of Release: " + movieObj.Year);
+	    console.log("\nIMDB Rating: " + movieObj.imdbRating);
+	    console.log("\nRotten Tomatoes Rating: " + movieObj.Ratings[1].Value);
+	    console.log("\nCountries Produced: " + movieObj.Production);
+	    console.log("\nLanguage: " + movieObj.Language);
+	    console.log("\nPlot: " + movieObj.Plot);
+	    console.log("\nCast: " + movieObj.Actors);
   	}
   })
 }
+
+//==================== JUST-DO-IT =====================
+
+function justDoIt(){
+	fs.readFile("random.txt", "utf8", function(err, data){
+		if (!err){
+			var prefer = [];
+			data.split(" ").forEach(function(item){
+				prefer.push(item);
+			});
+			iDecide = prefer.shift();
+			prefer = prefer.join(" ").replace('"', "");
+			prefer = prefer.replace('"', "");
+			console.log(iDecide);
+			console.log(prefer);
+			checkIt(iDecide, prefer);
+
+		}	
+	})
+}
+
+runIt(process.argv[2], process.argv);
+
+
+
+
+
+
 
