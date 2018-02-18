@@ -137,6 +137,7 @@ function justDoIt(){
 			console.log(iDecide);
 			console.log(prefer);
 			checkIt(iDecide, prefer);
+			listenUp(prefer);
 
 		}	
 	})
