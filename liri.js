@@ -136,12 +136,14 @@ function justDoIt(){
 			prefer = prefer.replace('"', "");
 			console.log(iDecide);
 			console.log(prefer);
-			checkIt(iDecide, prefer);
+			// checkIt(iDecide, prefer);
 			listenUp(prefer);
 
 		}	
 	})
 }
+
+
 
 runIt(process.argv[2], process.argv);
 
